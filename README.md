@@ -1,31 +1,51 @@
-# gocryptfs WebUI (Local-Only)
+# gocryptfs Manager (Local-Only)
 
-Local-only WebUI for `gocryptfs` on Linux. Uses a Python FastAPI backend to execute system commands on `127.0.0.1:8000`. No database, no password storage, no external exposure.
+Local-only Web UI for `gocryptfs` on Linux. Runs a FastAPI backend on `127.0.0.1:8000` and executes local `gocryptfs`/`fusermount` commands.
 
 ## Prerequisites
 - Linux
 - `gocryptfs` in `PATH`
 - `fusermount` in `PATH`
-- Optional: `zenity` for the native folder picker
+- Optional: `zenity` for folder picker dialogs
 
-## Install (pip)
+Quick check:
 ```bash
-pip install -r requirements.txt
+which gocryptfs fusermount
 ```
 
-## Install (conda)
+## Install
+
+### Option 1: pip
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+### Option 2: conda
 ```bash
 conda env create -f environment.yml
 conda activate gocryptfs-webui
 ```
 
 ## Run
+From this project directory:
 ```bash
 python3 app.py
 ```
-Open `http://127.0.0.1:8000`.
+
+Then open:
+```text
+http://127.0.0.1:8000
+```
+
+## What the UI supports
+- Init encrypted directory (`gocryptfs -init`)
+- Mount with password unlock
+- Mount with master-key unlock (`-masterkey=stdin`)
+- Useful mount flags (`-ro`, `-allow_other`, `-sharedstorage`, `-reverse`, `-aessiv`, `-plaintextnames`, `-xchacha`, `-idle`, `-ko`)
+- Show config info (`gocryptfs -info`)
+- Unmount (`fusermount -u`)
 
 ## Notes
-- The folder picker uses `zenity`. If not installed, enter absolute paths manually.
-- Paths with spaces are supported.
-- Passwords are sent via stdin and never stored or logged.
+- Use absolute paths in the UI.
+- Folder picker uses `zenity`; without it, type paths manually.
+- Secrets are passed via stdin and are not persisted by the app.
